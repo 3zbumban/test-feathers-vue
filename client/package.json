@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "copy": "rm -rf ../server/public/* && cp -r ./dist/* ../server/public"
   },
   "dependencies": {
     "@feathersjs/authentication-client": "^4.5.11",

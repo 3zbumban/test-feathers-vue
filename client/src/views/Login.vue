@@ -1,14 +1,12 @@
 <template>
-<div>
-  <form @submit.prevent="login" class="signUp">
-    <h1>Login!</h1>
-    <input v-model="user.username" type="text" placeholder="username">
-    <input v-model="user.password" type="password" placeholder="password">
-    <input type="submit" value="Login!">
-  </form>
-</div>
-<!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-<!-- <HelloWorld msg="Hello Vue 3 + Vite" /> -->
+  <div>
+    <form @submit.prevent="login" class="signUp">
+      <h1>Login!</h1>
+      <input v-model="user.username" type="text" placeholder="username">
+      <input v-model="user.password" type="password" placeholder="password">
+      <input type="submit" value="Login!">
+    </form>
+  </div>
 </template>
 
 <script setup>
@@ -16,7 +14,10 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 // import HelloWorld from './components/HelloWorld.vue'
 import { reactive } from '@vue/reactivity';
+import { useRouter } from 'vue-router';
 import api from '../feathers';
+
+const router = useRouter();
 
 const user = reactive({
   username: '',
@@ -24,18 +25,20 @@ const user = reactive({
   // confirmPassword: '',
 });
 
-const login = () => {
+const login = async () => {
   console.log(user)
-  api.authenticate({
-    strategy: 'local',
-    ...user,
-    confirmPassword: user.password,
-  }).then((user) => {
+  // await api.reAuthenticate()
+  try {
+    const created = await api.authenticate({
+      strategy: 'local',
+      ...user,
+    })
     console.log('User logged in!')
-    console.log(user)
-  }).catch((error) => {
-    console.log(error.message)
-  })
+    console.log(created)
+    await router.push({path: '/home'})
+  } catch (error) {
+    console.log(error.message); 
+  }
 }
 
 </script>

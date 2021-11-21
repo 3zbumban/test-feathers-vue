@@ -12,7 +12,15 @@ client.configure(socketio(socket, {
     forceNew: true,
   })
 );
-client.configure(auth({ storage: window.localStorage }));
+client.configure(auth(
+  { 
+    storage: window.localStorage, 
+    storageKey: "feathers-jwt", 
+    userService: "users",
+    usernameField: "username",
+    passwordField: "password",
+  }
+));
 
 // client.service("users").create({
 //     username: "asd1",

@@ -1,15 +1,13 @@
 <template>
-<div>
-  <form @submit.prevent="signUp" class="signUp">
-    <h1>SignUp!</h1>
-    <input v-model="user.username" type="text" placeholder="username">
-    <input v-model="user.password" type="password" placeholder="password">
-    <input v-model="user.confirmPassword" type="password" placeholder="confirm password">
-    <input type="submit" value="Login!">
-  </form>
-</div>
-<!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-<!-- <HelloWorld msg="Hello Vue 3 + Vite" /> -->
+  <div>
+    <form @submit.prevent="signUp" class="signUp">
+      <h1>SignUp!</h1>
+      <input v-model="user.username" type="text" placeholder="username">
+      <input v-model="user.password" type="password" placeholder="password">
+      <input v-model="user.confirmPassword" type="password" placeholder="confirm password">
+      <input type="submit" value="Login!">
+    </form>
+  </div>
 </template>
 
 <script setup>
@@ -28,21 +26,23 @@ const user = reactive({
   confirmPassword: '',
 });
 
-const signUp = () => {
+const signUp = async () => {
   // if (user.password !== user.confirmPassword) {
   //   alert('Passwords do not match!')
   //   return
   // }
-  api.service("users").create({
-    strategy: 'local',
-    ...user
-  }).then((user) => {
+  try {
+    const created = await api.service("users").create({
+      strategy: 'local',
+      username: user.username,
+      password: user.password,
+    })
     console.log('User signed up!')
-    console.log(user)
-    router.push({ path: '/login'})
-  }).catch((error) => {
+    console.log(created)
+    await router.push({ path: '/login'}) 
+  } catch (error) {
     console.log(error.message)
-  })
+  }
 }
 
 </script>

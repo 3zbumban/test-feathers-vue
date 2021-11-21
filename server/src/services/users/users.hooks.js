@@ -4,25 +4,9 @@ const {
   hashPassword, protect
 } = require("@feathersjs/authentication-local").hooks;
 
-const removeProperty = (context) => {
-  // delete context.data.confirmPassword;
-  context.data.msg = "😎";
-  return context;
-};
-
 module.exports = {
   before: {
-    all: [ 
-      (context) => {
-        delete context.data.confirmPassword;
-        return context;
-      },
-      // async (context) => {
-      //   context.data.msg = "😎";
-      //   return context;
-      // }
-      removeProperty
-    ],
+    all: [],
     find: [ authenticate("jwt") ],
     get: [ authenticate("jwt") ],
     create: [ hashPassword("password") ],
@@ -35,7 +19,7 @@ module.exports = {
     all: [ 
       // Make sure the password field is never sent to the client
       // Always must be the last hook
-      protect("password")
+      protect(["password", "strategy"])
     ],
     find: [],
     get: [],
