@@ -5,11 +5,10 @@
       <input v-model="payload" type="text" placeholder="write something!">
       <input type="submit" value="post!">
     </form>
-    <div>
+    <div class="posts">
       <ul>
         <li v-for="(post, index) in posts" :key="index">
-            <h3>{{ index }}</h3>
-            <p>{{ post }}</p>
+            <span><small>{{ index }}:</small> {{ post }}</span>
         </li>
       </ul>
     </div>
@@ -17,12 +16,10 @@
 </template>
 
 <script setup>
-// import { reactive } from "@vue/reactivity";
-import { ref, reactive } from "vue"
+import { ref, reactive, onMounted } from "vue"
 import api from "../feathers"
 
 const payload = ref("");
-
 const posts = reactive([])
 
 const post = async () => {
@@ -45,6 +42,17 @@ api.service("posts").on("created", (post) => {
   posts.push(post.text);
 });
 
+onMounted(async () => {
+  try {
+    const result = await api.service("posts").find()
+    result.data.forEach(post => {
+      posts.push(post.text);
+    });
+  } catch (error) {
+    console.log(error.message)
+  }
+});
+
 </script>
 
 
@@ -53,15 +61,26 @@ api.service("posts").on("created", (post) => {
   display: flex;
   flex-direction: column;
   align-content: center;
-  width: 80rem;
+  // justify-content: center;
+  align-items: center;
+  // width: 80rem;
+  height: 100%;
+  width: 100%;
 
   form {
     display: flex;
     flex-direction: row;
     justify-items: baseline;
-    // input {
+    input[type="text"] {
       // padding: 0;
-    // }
+      width: 50rem;
+    }
+  }
+
+  .posts {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
   }
 }
 </style>

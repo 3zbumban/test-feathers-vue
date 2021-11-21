@@ -13,7 +13,7 @@ const routes = [
     }
   },
   {
-    path: "/",
+    path: "/signup",
     name: "signUp",
     component: SignUp,
     meta: {
@@ -37,10 +37,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   console.log({to, from});
-  if (to.meta.secure && !localStorage.getItem("feathers-jwt")) {
-    next("/login")
-  } else { 
-    next() 
+  if(to.path === "/") {
+    next("/signup");
+  } else {
+    if (to.meta.secure && !localStorage.getItem("feathers-jwt")) {
+      next("/signup")
+    } else { 
+      next() 
+    }
   }
 });
 

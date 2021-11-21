@@ -6,6 +6,7 @@
       <input v-model="user.password" type="password" placeholder="password">
       <input type="submit" value="Login!">
     </form>
+    <input @click.prevent="router.push({ path: '/signup'})" value="SignUp!" type="button">
   </div>
 </template>
 
@@ -46,6 +47,7 @@ const login = async () => {
 <style lang="scss" scoped>
 div {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   .signUp {
     display: flex;

@@ -7,6 +7,7 @@
       <input v-model="user.confirmPassword" type="password" placeholder="confirm password">
       <input type="submit" value="Login!">
     </form>
+    <input @click.prevent="router.push({ path: '/login'})" value="login!" type="button">
   </div>
 </template>
 
@@ -51,6 +52,7 @@ const signUp = async () => {
 div {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   .signUp {
     display: flex;
     flex-direction: column;
