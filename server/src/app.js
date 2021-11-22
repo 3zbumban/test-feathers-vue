@@ -17,7 +17,7 @@ const channels = require("./channels");
 
 const authentication = require("./authentication");
 
-const mongodb = require("./mongodb");
+// const mongodb = require("./mongodb");
 
 const app = express(feathers());
 
@@ -41,7 +41,7 @@ app.use("/", express.static(app.get("public")));
 app.configure(express.rest());
 app.configure(socketio());
 
-app.configure(mongodb);
+// app.configure(mongodb);
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
