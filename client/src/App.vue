@@ -7,11 +7,9 @@ import { onMounted } from "@vue/runtime-core";
 import api from "./feathers";
 import { setUser } from "./store";
 
-// const { user } = store
-
 onMounted(async () => {
   try {
-    const user = await api.reAuthenticate()
+    const { user } = await api.reAuthenticate()
     console.log(user)
     console.log("reauthenticated!!")
     setUser(user.username, user._id)

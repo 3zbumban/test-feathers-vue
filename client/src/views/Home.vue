@@ -1,9 +1,10 @@
 <template>
   <div class="home">
-    <h1>Welcome Home 💚 {{ store.user.username }}</h1>
+    <h1>Welcome Home 💚 <span v-if="store.user.username" class="username">~ {{ store.user.username }}</span></h1>
+    <button @click.prevent="logout">Logout</button>
     <form @submit.prevent="post">
       <input v-model="payload" type="text" placeholder="write something!">
-      <input type="submit" value="post!">
+      <input type="submit" value="post!" class="button-primary">
     </form>
     <div class="feed scroll scroll--grey" ref="feed">
         <p v-for="(post, index) in posts" :key="index">
@@ -17,12 +18,25 @@
 import { ref, reactive, onMounted, nextTick } from "vue"
 
 import api from "../feathers"
-import { store } from "../store";
+import { store, setUser } from "../store";
+import { useRouter } from "vue-router";
+
+const feed = ref(null);
+const router = useRouter();
 
 const payload = ref("");
-const feed = ref(null);
 const posts = reactive([])
 
+const logout = async () => {
+  try {
+    setUser("", "");
+    await api.logout()
+    await router.push({ path: "/login" })
+    // store.user = {}
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 const post = async () => {
   console.log(payload.value);
@@ -106,5 +120,12 @@ onMounted(async () => {
       background-color: lightgreen;
     }
   }
+}
+
+.username {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  background-color: lightgreen;
+  border-radius: 0.5rem;
 }
 </style>

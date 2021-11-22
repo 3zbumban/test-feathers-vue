@@ -17,6 +17,7 @@
 import { reactive } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
 import api from '../feathers';
+import { setUser } from '../store';
 
 const router = useRouter();
 
@@ -36,6 +37,7 @@ const login = async () => {
     })
     console.log('User logged in!')
     console.log(created)
+    setUser(created.user.username, created.user._id)
     await router.push({path: '/home'})
   } catch (error) {
     console.log(error.message); 
