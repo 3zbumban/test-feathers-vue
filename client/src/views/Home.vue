@@ -8,7 +8,7 @@
     </form>
     <div class="feed scroll scroll--grey" ref="feed">
         <p v-for="(post, index) in posts" :key="index">
-            <span><small>{{ index }}:</small> {{ post }}</span>
+            <span><small>{{ post.user }}:</small> {{ post.text }}</span>
         </p>
     </div>
   </div>
@@ -32,7 +32,6 @@ const logout = async () => {
     setUser("", "");
     await api.logout()
     await router.push({ path: "/login" })
-    // store.user = {}
   } catch (error) {
     console.log(error.message)
   }
@@ -40,44 +39,54 @@ const logout = async () => {
 
 const post = async () => {
   console.log(payload.value);
+  if (payload.value.length > 0) {
   try {
     const post = await api.service("posts").create({
       text: payload.value,
+      user: store.user.username
     });
-    console.log(post);
+    // console.log(post);
   } catch (error) {
     console.error(error.message);
   }
   payload.value = "";
+  } else {
+    console.log("no post");
+  }
 }
 
 const scrollToBottom = async () => {
-  await nextTick(() => {
-    feed.value.children[feed.value.children.length-1].scrollIntoView({
-        behavior: "smooth",
-      block: "end",
-    });
+  await new Promise((res, rej) => {
+    setTimeout(async () => {
+      await nextTick(() => {
+        feed.value.children[feed.value.children.length-1].scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+        res();
+      });
+    }, 600);
   });
 }
 
 api.service("posts").on("created", (post) => {
-  console.log(post.text);
-  posts.push(post.text);
+  console.log(post);
+  posts.push({...post});
   scrollToBottom();
 });
 
 onMounted(async () => {
   try {
     const result = await api.service("posts").find()
+    console.log(result);
     result.data.forEach(post => {
-      posts.push(post.text);
+      posts.push({...post});
     });
     await scrollToBottom();
   } catch (error) {
     console.log(error.message)
   }
 });
-
 </script>
 
 
@@ -86,11 +95,10 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-content: center;
-  // justify-content: center;
   align-items: center;
-  // width: 80rem;
   height: 100%;
   width: 100%;
+  padding: 10px;
 
   form {
     display: flex;
@@ -99,8 +107,7 @@ onMounted(async () => {
     scroll-behavior: smooth;
 
     input[type="text"] {
-      // padding: 0;
-      width: 50rem;
+      width: 50vw;
     }
   }
 

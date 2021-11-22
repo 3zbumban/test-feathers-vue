@@ -4,8 +4,11 @@
 
 <script setup>
 import { onMounted } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 import api from "./feathers";
 import { setUser } from "./store";
+
+const router = useRouter();
 
 onMounted(async () => {
   try {
@@ -15,6 +18,9 @@ onMounted(async () => {
     setUser(user.username, user._id)
   } catch (error) {
     console.log(error.message)
+    localStorage.removeItem("feathers-jwt");
+    document.cookie = "";
+    await router.push({ path: "/signup" })
   }
 });
 
