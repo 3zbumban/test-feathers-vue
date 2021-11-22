@@ -13,9 +13,7 @@ module.exports = {
   },
 
   after: {
-    all: [
-      protect(["password", "strategy"])
-    ],
+    all: [],
     find: [],
     get: [],
     create: [],

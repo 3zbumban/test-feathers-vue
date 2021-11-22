@@ -5,7 +5,7 @@
       <input v-model="user.username" type="text" placeholder="username">
       <input v-model="user.password" type="password" placeholder="password">
       <input v-model="user.confirmPassword" type="password" placeholder="confirm password">
-      <input type="submit" value="Login!">
+      <input type="submit" value="Sign up!">
     </form>
     <input @click.prevent="router.push({ path: '/login'})" value="login!" type="button">
   </div>

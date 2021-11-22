@@ -15,10 +15,7 @@ module.exports = app => {
   }
 
   authentication.register("jwt", new MyJWTStategy());
-  authentication.register("local", new LocalStrategy({
-    entityPasswordField: "password",
-    entityUsernameField: "username"
-  }));
+  authentication.register("local", new LocalStrategy());
 
   app.use("/authentication", authentication);
   app.configure(expressOauth());
