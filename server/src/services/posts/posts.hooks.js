@@ -1,5 +1,7 @@
-const { protect } = require("@feathersjs/authentication-local").hooks;
+// const { protect } = require("@feathersjs/authentication-local").hooks;
 const { authenticate } = require("@feathersjs/authentication").hooks;
+const { validateSchema } = require("feathers-hooks-common");
+const ajv = require("ajv");
 
 // const logToken = require("../../hooks/log-token");
 
@@ -8,11 +10,22 @@ module.exports = {
     all: [ 
       // logToken({auth: true}),
       authenticate("jwt"),
-      protect(["accessToken", "authentication"])
     ],
     find: [],
     get: [],
-    create: [],
+    create: [
+      validateSchema({
+        properties: {
+          user: {
+            type: "string",
+          },
+          text: {
+            type: "string",
+          }
+        },
+        required: ["user", "text"]
+      }, ajv)
+    ],
     update: [],
     patch: [],
     remove: []
@@ -29,7 +42,12 @@ module.exports = {
   },
 
   error: {
-    all: [],
+    all: [      
+      context => {
+        // throw new Error("😎");
+        return context;
+      }
+    ],
     find: [],
     get: [],
     create: [],

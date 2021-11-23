@@ -9,6 +9,7 @@ const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
 const socketio = require("@feathersjs/socketio");
+// const swagger = require("feathers-swagger");
 
 const middleware = require("./middleware");
 const services = require("./services");
@@ -35,6 +36,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get("public"), "favicon.ico")));
 // Host the public folder
+// app.configure(swagger({
+//   specs: {
+//     info: {
+//       title: "A test",
+//       description: "A description",
+//       version: "1.0.0",
+//     },
+//     schemes: ["http", "https"], // Optionally set the protocol schema used (sometimes required when host on https)
+//     uiIndex: true, // Optionally set the path to the Swagger UI index.html file
+//   }
+// }));
 app.use("/", express.static(app.get("public")));
 
 // Set up Plugins and providers

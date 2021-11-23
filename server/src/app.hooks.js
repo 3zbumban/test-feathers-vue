@@ -1,5 +1,6 @@
 // Application hooks that run for every service
 const { protect } = require("@feathersjs/authentication-local").hooks;
+const { iff, isProvider } = require("feathers-hooks-common");
 
 module.exports = {
   before: {
@@ -13,7 +14,10 @@ module.exports = {
   },
 
   after: {
-    all: [],
+    all: [
+      protect("password"),
+      iff(isProvider("external"), protect("strategy")),
+    ],
     find: [],
     get: [],
     create: [],
@@ -23,7 +27,11 @@ module.exports = {
   },
 
   error: {
-    all: [],
+    all: [
+      // context => {
+      //   console.log(context);
+      // }
+    ],
     find: [],
     get: [],
     create: [],

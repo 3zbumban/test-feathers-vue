@@ -14,12 +14,11 @@ module.exports = {
     patch: [ hashPassword("password"),  authenticate("jwt") ],
     remove: [ authenticate("jwt") ]
   },
-
   after: {
     all: [ 
       // Make sure the password field is never sent to the client
       // Always must be the last hook
-      protect(["password", "strategy"])
+      protect("password")
     ],
     find: [],
     get: [],
@@ -28,7 +27,6 @@ module.exports = {
     patch: [],
     remove: []
   },
-
   error: {
     all: [],
     find: [],
